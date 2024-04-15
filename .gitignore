@@ -1,32 +1,82 @@
-# Prerequisites
-*.d
+#include <cstdlib>
+#include <iostream>
+#include <string>
+using namespace std;
 
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
+int ReadNum(string Message)
+{
+	int Number = 0;
 
-# Precompiled Headers
-*.gch
-*.pch
+	cout << Message;
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
+	cin >> Number;
 
-# Fortran module files
-*.mod
-*.smod
+	cout << endl << endl;
 
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
+	while (cin.fail()/*التاكد ادا كان محتوى عدد او حرف ادا كان حرف معنها صحيح*/)
+	{
 
-# Executables
-*.exe
-*.out
-*.app
+		cin.clear();/* ادا يجب اعادت تهيئة حالة الان كان متوقع ان تستقبل عدد وليس حرف ادا سوف يثم تغير الخطاء بصحيح*  / /* إزالة البيانات الفائضة من الذاكرة المؤقتةو تفادي حلقات التكرار اللامتناهية:*/
+
+		cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');/*تستخدم لتجاوز وتجاهل البيانات غير المرغوب (حدف)*/
+
+		cout << "Invalid input. Please enter a number.\n";
+
+		cin >> Number;
+
+		cout << endl << endl << endl;
+
+	}
+
+	return Number;
+}
+
+int RandomNumber(int From, int To)
+{
+	int randNum = rand() % (To - From + 1) + From;
+
+	return randNum;
+}
+
+void FillArray_Random_Num(int *PtrArray, int& Length)
+{
+	for (int i = 0; i < Length ; i++)
+	{
+		*(PtrArray + i) = RandomNumber(1, 100);
+	}
+}
+
+
+
+void PrintArrayData(int* PtrArray, int Length)
+{
+	for (int i = 0; i < Length ; i++)
+	{
+		cout << *(PtrArray + i) << " ";
+	}
+	cout << "\n";
+}
+
+
+int main()
+{
+	srand((unsigned)time(NULL));
+
+	int Length = ReadNum("How Many Numbers do you want to enter?  ");
+
+
+	int* PtrArray;
+
+	PtrArray = new int[Length];
+
+	FillArray_Random_Num(PtrArray, Length);
+
+	cout << "\n\nArray elemant: ";
+	PrintArrayData(PtrArray, Length);
+
+	delete PtrArray;
+
+	cout << "\n************************************\n";
+
+	return 0;
+}
